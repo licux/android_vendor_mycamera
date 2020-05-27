@@ -1,0 +1,43 @@
+
+cc_binary {
+    name: "mycamera",
+    proprietary: true,
+    srcs: [
+        "src/CameraUtil.cpp",
+        "src/main.cpp"
+    ],
+
+    shared_libs: [
+		"liblog",
+        "libui",
+        "libutils",
+        "libbinder",
+        "libhardware",
+        "libhidlbase",
+        "libhidltransport",
+        "libhwbinder",
+        "libbase",
+        "libcamera_metadata",
+        "vendor.masaki.hardware.camera.provider@2.4",
+        "android.hardware.camera.provider@2.4",
+        "vendor.masaki.hardware.camera.provider@2.4-impl",
+        "android.hardware.camera.device@1.0",
+        "android.hardware.camera.device@3.2",
+        "android.hardware.camera.device@3.3",
+        "vendor.masaki.hardware.camera.device@3.3-impl",
+        "vendor.masaki.hardware.camera.device@3.3",
+    ],
+
+    cflags: ["-Wall", "-Werror"],
+
+    static_libs: [
+        "android.hardware.camera.common@1.0-helper",
+        "libgrallocusage",
+    ],
+
+    header_libs: [
+        "camera.device@3.3-impl_headers",
+    ],
+
+	init_rc: ["mycamera.rc"],
+}
