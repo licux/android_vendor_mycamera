@@ -139,12 +139,13 @@ int main(){
     });
 
 
+    uint32_t frameNumber = 0;
     sp<GraphicBuffer> gb = new GraphicBuffer(1280, 720, android::PIXEL_FORMAT_RGB_565, 1, 
         android_convertGralloc1To0Usage(android::GraphicBuffer::USAGE_SW_WRITE_OFTEN, android::GraphicBuffer::USAGE_SW_READ_OFTEN));
     StreamBuffer outputBuffer = {0, 0, hidl_handle(gb->getNativeBuffer()->handle), BufferStatus::OK, nullptr, nullptr};
     hidl_vec<StreamBuffer> outputBuffers = { outputBuffer };
     StreamBuffer emptyInputBuffer = {-1, 0, nullptr, BufferStatus::ERROR, nullptr, nullptr};
-    CaptureRequest request = {0, 0, metadata, emptyInputBuffer, outputBuffers};
+    CaptureRequest request = {frameNumber++, 0, metadata, emptyInputBuffer, outputBuffers};
     hidl_vec<BufferCache> caches;
     uint32_t numRequestProcessed = 0;
     cameraSession->processCaptureRequest(
@@ -154,6 +155,7 @@ int main(){
             }
     });
 
+    request.frameNumber++;
     cameraSession->processCaptureRequest(
         {request}, caches, [&](auto status, const auto& num){
             if(status == Status::OK){
@@ -161,4 +163,5 @@ int main(){
             }
     });
 
+    cameraSession->close();
 }
